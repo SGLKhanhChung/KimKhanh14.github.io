@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>The Secret Life Of Pets</title>
+<style>
+	body{
+		width:100vw;		height:100vh;		display:flex;		justify-content:center;
+		align-items: center;
+	}
+</style>
+</head>
+
+<body>
+<video id="v" controls loop>
+	<source src="TheSecretLifeOfPets.mp4" 
+	type="video/mp4">
+</video>
+
+<canvas id="c"></canvas>
+
+
+<script>
+	document.addEventListener('DOMContentLoaded', function(){
+    		var v = document.getElementById('v');
+    		var canvas = document.getElementById('c');
+    		var context = canvas.getContext('2d');
+    		var back = document.createElement('canvas');
+    		var backcontext = back.getContext('2d');
+
+    		var cw,ch;
+
+    		v.addEventListener('play', function(){
+        		cw = v.clientWidth;
+        		ch = v.clientHeight;
+        		canvas.width = cw;
+        		canvas.height = ch;
+        		back.width = cw;
+        		back.height = ch;
+        		draw(v,context,backcontext,cw,ch);
+    		},false);
+
+	},false);
+
+	function draw(v,c,bc,cw,ch) {
+    		if(v.paused || v.ended) return false;
+
+    		bc.drawImage(v,0,0,cw,ch);
+
+    		var idata = bc.getImageData(0,0,cw,ch);
+    		var data = idata.data;
+    		var w = idata.width;
+    		var limit = data.length
+
+    		for(var i = 0; i < limit; i++) {
+        		if( i%4 == 3 ) continue;
+        		data[i] = 127 + 2*data[i] - data[i + 4] - data[i + w*4];
+    		}
+
+    		c.putImageData(idata,0,0);
+
+    		setTimeout(draw,20,v,c,bc,cw,ch);
+	}
+
+	document.addEventListener('DOMContentLoaded', function(){
+    		var v = document.getElementById('v');
+    		var canvas = document.getElementById('c');
+    		var context = canvas.getContext('2d');
+    		var back = document.createElement('canvas');
+    		var backcontext = back.getContext('2d');
+
+    		var cw,ch;
+
+    		v.addEventListener('play', function(){
+        		cw = v.clientWidth;
+        		ch = v.clientHeight;
+        		canvas.width = cw;
+        		canvas.height = ch;
+        		back.width = cw;
+        		back.height = ch;
+        		draw(v,context,backcontext,cw,ch);
+    		},false);
+	},false);
+</script>
+</body>
+</html>
